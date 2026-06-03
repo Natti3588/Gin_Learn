@@ -1,24 +1,26 @@
 package main
 
 import (
+	"fmt"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
+
+// c.Query() / c.DefaultQuery() は URL クエリ文字列から読み取る
+// c.PostForm() / c.DefaultPostForm() は application/x-www-form-urlencodedのリクエストボディから読み取る
 
 func main() {
 	router := gin.Default()
 
-	router.POST("/form_post", func(c *gin.Context) {
-		// c.PostForm() はリクエストから値を取得する
+	router.POST("/post", func(c *gin.Context) {
+		id := c.Query("id")
+		page := c.DefaultPostForm("page", "0")
+		name := c.PostForm("name")
 		message := c.PostForm("message")
 
-		// c.DefaultPostForm() は値が存在しなかったら、第二引数の値をセットする
-		nick := c.DefaultPostForm("nick", "anonymous")
-
-		c.JSON(200, gin.H{
-			"status":  "posted",
-			"message": message,
-			"nick":    nick,
-		})
+		fmt.Printf("id: %s; page: %s; name: %s; message: %s\n", id, page, name, message)
+		c.String(http.StatusOK, "id: %s; page: %s; name: %s; message: %s\n", id, page, name, message)
 	})
 
 	router.Run(":8080")
