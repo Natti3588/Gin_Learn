@@ -1,22 +1,24 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	router := gin.Default()
 
-	router.GET("/hello", func(c *gin.Context) {
-		c.String(http.StatusOK, "Hello World")
-	})
+	router.POST("/form_post", func(c *gin.Context) {
+		// c.PostForm() はリクエストから値を取得する
+		message := c.PostForm("message")
 
-	router.POST("/users", func(c *gin.Context) {
-		// c.PostForm()は POSTリクエストで送信された、フォームの値を取得するメソッド
-		name := c.PostForm("name")
-		c.JSON(http.StatusOK, gin.H{"user": name})
+		// c.DefaultPostForm() は値が存在しなかったら、第二引数の値をセットする
+		nick := c.DefaultPostForm("nick", "anonymous")
+
+		c.JSON(200, gin.H{
+			"status":  "posted",
+			"message": message,
+			"nick":    nick,
+		})
 	})
 
 	router.Run(":8080")
