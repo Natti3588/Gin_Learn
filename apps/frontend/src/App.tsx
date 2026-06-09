@@ -1,13 +1,14 @@
-import { useState } from 'react'
+import { useState } from "react";
+import Chat from "./components/Chat";
 
 function App() {
-  const [count, setCount] = useState(0)
+	const [count, setCount] = useState(0);
 
-  return (
-    <>
-      <h1 className="bg-blue-600">こんにちは！</h1>
-    </>
-  )
+	return (
+		<>
+			<Chat />
+		</>
+	);
 }
 
-export default App
+export default App;
