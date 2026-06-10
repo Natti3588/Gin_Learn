@@ -1,0 +1,39 @@
+definitions:
+  models.ChatRequest:
+    properties:
+      message:
+        type: string
+    type: object
+  models.ChatResponse:
+    properties:
+      reply:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  title: サンプル API
+  version: "1.0"
+paths:
+  /posts:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: チャットリクエスト
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.ChatRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ChatResponse'
+      summary: チャットの追加と表示
+      tags:
+      - chat
+swagger: "2.0"

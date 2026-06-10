@@ -1,32 +1,29 @@
 package main
 
 import (
+	"backend/config"
+	"backend/routes"
 	"log"
-	"net/http"
 	"os"
+
+	_ "backend/docs"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title           サンプル API
+// @version         1.0
+// @host            localhost:8080
 func main() {
 	godotenv.Load()
+	db := config.InitDB()
 	router := gin.Default()
 
-	router.POST("/chat", func(c *gin.Context) {
-		var req struct {
-			Message string `json:"message" binding:"required"`
-		}
-
-		if err := c.ShouldBindJSON(&req); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-
-		reply := "受け取ったメッセージ： " + req.Message
-		c.JSON(http.StatusOK, gin.H{"reply": reply})
-	})
-
+	routes.SetupROutes(router, db)
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	// 起動用
 	port := os.Getenv("PORT")
 	if port == "" {

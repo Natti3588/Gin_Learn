@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input"
 
 export default function Chat() {
 	const [message, setMessage] = useState("");
@@ -25,16 +25,16 @@ export default function Chat() {
 	};
 
 	return (
-		<div>
-			<h1>Zenith</h1>
+		<div className="flex flex-col justify-center items-center h-52 gap-4">
+			<h1 className="text-lg">Glog</h1>
 			<Input
 				type="text"
-				className="p-2 w-75"
+				className="p-2 w-72"
 				onChange={(e) => setMessage(e.target.value)}
 				placeholder="メッセージを入力"
 			/>
 
-			<Button variant="secondary" className="ml-1" onClick={handleSend}>
+			<Button variant="secondary" onClick={handleSend}>
 				送信
 			</Button>
 			<div className="mt-4">
