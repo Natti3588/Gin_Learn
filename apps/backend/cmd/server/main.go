@@ -22,7 +22,7 @@ func main() {
 	db := config.InitDB()
 	router := gin.Default()
 
-	routes.SetupROutes(router, db)
+	routes.SetupROutes(router)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	// 起動用
 	port := os.Getenv("PORT")
