@@ -1,12 +1,12 @@
 package config
 
 import (
-	"backend/models"
 	"fmt"
 	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 func InitDB() *gorm.DB {
@@ -19,11 +19,12 @@ func InitDB() *gorm.DB {
 		os.Getenv("DB_PORT"),
 	)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
 	if err != nil {
-		panic("DB接続失敗: " + err.Error())
+		panic(fmt.Errorf("DB接続失敗: %w", err))
 	}
 
-	db.AutoMigrate(&models.Post{})
 	return db
 }

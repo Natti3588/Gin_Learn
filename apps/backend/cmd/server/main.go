@@ -1,8 +1,10 @@
 package main
 
 import (
-	"backend/config"
-	"backend/routes"
+	"backend/internal/config"
+	"backend/internal/model"
+	"backend/internal/router"
+	"fmt"
 	"log"
 	"os"
 
@@ -20,16 +22,20 @@ import (
 func main() {
 	godotenv.Load()
 	db := config.InitDB()
-	router := gin.Default()
+	if err := db.AutoMigrate(&model.Post{}); err != nil {
+		panic(fmt.Errorf("マイグレーション失敗: %w", err))
+	}
 
-	routes.SetupROutes(router)
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	engine := gin.Default()
+
+	router.SetupRoutes(engine)
+	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	// 起動用
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
-	if err := router.Run(":" + port); err != nil {
+	if err := engine.Run(":" + port); err != nil {
 		log.Fatal(err)
 	}
 }
