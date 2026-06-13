@@ -8,12 +8,7 @@ import (
 	"log"
 	"os"
 
-	_ "backend/docs"
-
-	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // @title           サンプル API
@@ -26,16 +21,14 @@ func main() {
 		panic(fmt.Errorf("マイグレーション失敗: %w", err))
 	}
 
-	engine := gin.Default()
+	r := router.New()
 
-	router.SetupRoutes(engine)
-	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	// 起動用
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
-	if err := engine.Run(":" + port); err != nil {
+	if err := r.Run(":" + port); err != nil {
 		log.Fatal(err)
 	}
 }
