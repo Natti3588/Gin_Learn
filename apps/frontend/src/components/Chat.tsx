@@ -1,45 +1,64 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/input";
 
 export default function Chat() {
+	const [title, setTitle] = useState("");
+	const [body, setBody] = useState("");
 	const [message, setMessage] = useState("");
-	const [reply, setReply] = useState("");
 
 	const handleSend = async () => {
-		if (!message.trim()) return;
+		if (!title.trim()) {
+			setMessage("タイトルを入力してください");
+			return;
+		}
 		try {
-			const res = await fetch("/api/chat", {
+			// proxy: /api/posts/ -> http://localhost:8080/posts/
+			const res = await fetch("/api/posts/", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ message }),
+				body: JSON.stringify({ title, body }),
 			});
-			const data = await res.json();
-			setReply(data.reply);
+
+			if (!res.ok) {
+				const err = await res.json();
+				setMessage(`登録失敗: ${err.error ?? res.status}`);
+				return;
+			}
+			setMessage("登録しました");
+			
 		} catch (err) {
-			// console.error(`送信エラー: ${err}`);
-			setReply("エラーが発生しました");
+			setMessage(err instanceof Error ? err.message : "エラーが発生しました");
+		} finally {
+			setTitle("");
+			setBody("");
 		}
 	};
 
 	return (
-		<div className="flex flex-col justify-center items-center h-52 gap-4">
+		<div className="flex flex-col justify-center items-center gap-4 p-4">
 			<h1 className="text-lg">Glog</h1>
 			<Input
 				type="text"
 				className="p-2 w-72"
-				onChange={(e) => setMessage(e.target.value)}
-				placeholder="メッセージを入力"
+				value={title}
+				onChange={(e) => setTitle(e.target.value)}
+				placeholder="タイトル"
+			/>
+			<Input
+				type="text"
+				className="p-2 w-72"
+				value={body}
+				onChange={(e) => setBody(e.target.value)}
+				placeholder="本文"
 			/>
 
 			<Button variant="secondary" onClick={handleSend}>
 				送信
 			</Button>
-			<div className="mt-4">
-				<strong>応答:</strong> {reply}
-			</div>
+			{message && <div className="mt-2 text-sm">{message}</div>}
 		</div>
 	);
 }
