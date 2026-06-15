@@ -9,6 +9,7 @@ import (
 	"gorm.io/gorm/logger"
 )
 
+// データベースのコネクションを定義して、 gorm.DBを返す
 func InitDB() *gorm.DB {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",

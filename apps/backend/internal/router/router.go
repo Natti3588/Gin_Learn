@@ -11,7 +11,8 @@ import (
 )
 
 // New は gin.Engine を生成し、ルートと swagger を登録して返す。
-func New() *gin.Engine {
+// 依存（handler）は外から注入する。
+func New(postHandler *handler.PostHandler) *gin.Engine {
 	r := gin.Default()
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -19,7 +20,8 @@ func New() *gin.Engine {
 	// 投稿系（ブログ）
 	posts := r.Group("/posts")
 	{
-		posts.POST("/chat", handler.ChatHandler)
+		posts.POST("/", postHandler.Create)
+		posts.GET("/", postHandler.List)
 	}
 
 	return r
