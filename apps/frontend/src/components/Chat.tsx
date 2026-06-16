@@ -13,7 +13,6 @@ export default function Chat() {
 			return;
 		}
 		try {
-			// proxy: /api/posts/ -> http://localhost:8080/posts/
 			const res = await fetch("/api/posts/", {
 				method: "POST",
 				headers: {
