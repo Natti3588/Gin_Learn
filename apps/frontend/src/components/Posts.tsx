@@ -32,7 +32,7 @@ export default function Posts() {
 		};
 
 		fetchPosts();
-	}, []); // 空配列 = マウント時に一度だけ実行
+	}, []);
 
 	if (loading) {
 		return <p className="text-center text-muted-foreground">読み込み中...</p>;

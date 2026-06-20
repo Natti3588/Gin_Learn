@@ -27,7 +27,6 @@ export default function Chat() {
 				return;
 			}
 			setMessage("登録しました");
-			
 		} catch (err) {
 			setMessage(err instanceof Error ? err.message : "エラーが発生しました");
 		} finally {
