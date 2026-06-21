@@ -1,8 +1,6 @@
 FROM nginx:1.30-alpine
 
-WORKDIR /app
-
-COPY conf.d/ .
+COPY ./conf.d /etc/nginx/conf.d
 
 EXPOSE 80
 
