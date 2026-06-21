@@ -10,8 +10,6 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// New は gin.Engine を生成し、ルートと swagger を登録して返す。
-// 依存（handler）は外から注入する。
 func New(postHandler *handler.PostHandler) *gin.Engine {
 	r := gin.Default()
 
